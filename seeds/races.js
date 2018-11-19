@@ -89,7 +89,11 @@ function generateRace(
 function seed(knex) {
   return knex('races')
     .del()
-    .then(() => generateRace(knex));
+    .then(() => generateRace(knex))
+    .then(() => {
+      const options = { numEntries: 60, classes: CLASS_NAMES.slice(2), numHours: 10 };
+      return generateRace(knex, options);
+    });
 }
 
 module.exports = { seed };
