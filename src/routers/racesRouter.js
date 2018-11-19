@@ -6,7 +6,7 @@ const races = require('../db/races');
 
 const router = new Router();
 
-router.route('/').get((req, res, next) => {
+router.get('/', (req, res, next) => {
   races
     .fetch()
     .then((allRaces) => {
