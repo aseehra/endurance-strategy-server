@@ -2,22 +2,21 @@
 
 const { Router } = require('express');
 
+const races = require('../db/races');
+
 const router = new Router();
 
-router.route('/').get((req, res) => {
-  const hardcoded = {
-    races: [
-      {
-        id: 1,
-        name: 'Weathertech Sportscars Petit Lemons',
-        location: 'Atlanta',
-        links: {
-          self: `${req.baseUrl}/1`,
-        },
-      },
-    ],
-  };
-  res.json(hardcoded);
+router.route('/').get((req, res, next) => {
+  races
+    .fetch()
+    .then((allRaces) => {
+      const serialized = allRaces.map(race => ({
+        ...race,
+        links: { self: `${req.baseUrl}/${race.id}` },
+      }));
+      res.json({ races: serialized });
+    })
+    .catch(next);
 });
 
 module.exports = router;
