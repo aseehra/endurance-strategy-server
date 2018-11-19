@@ -6,6 +6,10 @@
   "author": "Arun Seehra <seehra.a@gmail.com>",
   "license": "ISC",
   "private": true,
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
   "devDependencies": {
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -14,8 +18,11 @@
     "prettier-eslint": "^8.8.2"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
     "faker": "^4.1.0",
     "knex": "^0.15.2",
+    "morgan": "^1.9.1",
     "pg": "^7.6.1",
     "uuid": "^3.3.2"
   }
