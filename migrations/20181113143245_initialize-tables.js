@@ -49,7 +49,7 @@ function up(knex, Promise) {
       table.integer('driver_id');
       table.integer('lap_time').unsigned();
       table.integer('position_overall').unsigned();
-      table.integer('postion_class').unsigned();
+      table.integer('position_class').unsigned();
 
       table
         .foreign('entry_id')
