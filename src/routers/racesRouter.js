@@ -32,7 +32,7 @@ router.get('/:id/entries', (req, res, next) => {
         links: { self: `${req.baseUrl}/${id}/entries/${entry.id}` },
       }));
 
-      res.json({ entries: serialized });
+      res.json({ raceId: id, entries: serialized });
     })
     .catch(next);
 });
