@@ -24,7 +24,7 @@ function generateRace(
     .returning('*')
     .then((race) => {
       entries = new Array(options.numEntries).fill().map((e, index) => ({
-        race_id: race.id,
+        race_id: race[0].id,
         car_number: index,
         class: options.classes[index % options.classes.length],
         manufacturer: faker.company.companyName(),
@@ -82,7 +82,7 @@ function generateRace(
 
         return laps;
       });
-      console.log(entryLaps[0].length, entryLaps[29].length);
+      return Promise.all(entryLaps.map(laps => knex('laps').insert(laps)));
     });
 }
 
