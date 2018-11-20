@@ -28,7 +28,7 @@ module.exports = {
       .column(
         { id: 'entries.id' },
         { carNumber: 'car_number' },
-        'class',
+        { carClass: 'class' },
         'manufacturer',
         { positionOverall: 'position_overall' },
         { positionInClass: 'position_class' },

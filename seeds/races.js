@@ -72,7 +72,8 @@ function generateRace(
             entry_id: entry.id,
             lap_number: lapNum,
             position_overall: index + 1,
-            position_class: (index % options.classes.length) + 1,
+            position_class:
+              (index % Math.floor(entries.length / options.classes.length)) + 1,
             lap_time: Math.ceil(baseLapTime + baseLapTime * Math.random() * 0.11),
             driver_id:
               drivers[index * 3 + (Math.floor(lapNum / LAPS_PER_STINT) % 3)].id,
