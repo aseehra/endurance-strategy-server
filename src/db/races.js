@@ -25,6 +25,7 @@ module.exports = {
             knex.raw('(SELECT MAX(lap_number) FROM laps WHERE entry_id = entries.id)'),
           );
       })
+      .join('drivers', 'drivers.id', 'laps.driver_id')
       .column(
         { id: 'entries.id' },
         { carNumber: 'car_number' },
@@ -32,6 +33,7 @@ module.exports = {
         'manufacturer',
         { positionOverall: 'position_overall' },
         { positionInClass: 'position_class' },
+        { driverName: 'drivers.name' },
       )
       .select()
       .orderBy('position_overall', 'asc');
