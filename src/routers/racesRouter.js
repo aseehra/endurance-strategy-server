@@ -13,7 +13,6 @@ router.get('/', (req, res, next) => {
       const serialized = allRaces.map(race => ({
         ...race,
         links: {
-          self: `${req.baseUrl}/${race.id}`,
           entries: `${req.baseUrl}/${race.id}/entries`,
         },
       }));
@@ -29,7 +28,7 @@ router.get('/:id/entries', (req, res, next) => {
     .then((entries) => {
       const serialized = entries.map(entry => ({
         ...entry,
-        links: { self: `${req.baseUrl}/${id}/entries/${entry.id}` },
+        links: { statistics: `/api/statistics/entry/${entry.id}` },
       }));
 
       res.json({ raceId: id, entries: serialized });
