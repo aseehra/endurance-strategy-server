@@ -90,7 +90,11 @@ function generateRace(
     .then(() => {
       const pitStops = entryLaps.map((laps, index) => {
         const entryStops = [];
-        for (let lapIn = 1; lapIn <= laps.length; lapIn += LAPS_PER_STINT) {
+        for (
+          let lapIn = LAPS_PER_STINT;
+          lapIn <= laps.length;
+          lapIn += LAPS_PER_STINT
+        ) {
           const pitStop = {
             entry_id: entries[index].id,
             lap_in: lapIn,

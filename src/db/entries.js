@@ -36,14 +36,50 @@ module.exports = {
           .on('laps.lap_number', 'lap_in')
           .andOn('laps.entry_id', 'pit_stops.entry_id');
       })
-      .join('drivers', 'drivers.id', 'laps.driver_id')
+      .orderBy('lap_in')
       .select({
-        entryId: 'pit_stops.entry_id',
         lapIn: 'lap_in',
-        lapout: 'lap_out',
+        lapOut: 'lap_out',
         timeInLane: 'time_in_lane',
-        driverId: 'drivers.id',
-        driverName: 'drivers.name',
       });
+  },
+
+  stintData(entryId) {
+    let stintBoundaries;
+    return Promise.all([
+      this.pitStops(entryId),
+      knex('laps')
+        .where('entry_id', entryId)
+        .max({ lastLap: 'lap_number' }),
+    ])
+      .then(([pitStops, [{ lastLap }]]) => {
+        stintBoundaries = pitStops.reduce(
+          (acc, pitStop) => {
+            const stint = acc[acc.length - 1];
+            stint.end = pitStop.lapIn;
+            acc.push({ start: pitStop.lapOut });
+            return acc;
+          },
+          [{ start: 1 }],
+        );
+        stintBoundaries[stintBoundaries.length - 1].end = lastLap;
+
+        // TODO: Think about stint boundraries as it relates to in-/out-laps
+        return Promise.all(
+          stintBoundaries.map(boundary => knex('laps')
+            .where('entry_id', entryId)
+            .andWhereBetween('lap_number', [boundary.start, boundary.end])
+            .join('drivers', 'drivers.id', 'driver_id')
+            .groupBy('drivers.id', 'drivers.name')
+            .max({ fastestLapTime: 'lap_time' })
+            .avg({ averageLapTime: 'lap_time' })
+            .select({ driverId: 'drivers.id', driverName: 'drivers.name' })),
+        );
+      })
+      .then(stintStats => stintStats.map(([stintInfo], index) => ({
+        ...stintInfo,
+        stintStart: stintBoundaries[index].start,
+        stintEnd: stintBoundaries[index].end,
+      })));
   },
 };
