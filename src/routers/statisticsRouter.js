@@ -19,4 +19,14 @@ router.get('/entry/:entryId', (req, res, next) => {
     .catch(next);
 });
 
+router.get('/entry/:entryId/pits', (req, res, next) => {
+  const { entryId } = req.params;
+  entries
+    .pitStops(entryId)
+    .then((pitStops) => {
+      res.json({ entryId, pitStops });
+    })
+    .catch(next);
+});
+
 module.exports = router;

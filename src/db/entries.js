@@ -27,4 +27,23 @@ module.exports = {
       .orderBy('lap_number')
       .limit(1);
   },
+
+  pitStops(entryId) {
+    return knex('pit_stops')
+      .where('pit_stops.entry_id', entryId)
+      .join('laps', (join) => {
+        join
+          .on('laps.lap_number', 'lap_in')
+          .andOn('laps.entry_id', 'pit_stops.entry_id');
+      })
+      .join('drivers', 'drivers.id', 'laps.driver_id')
+      .select({
+        entryId: 'pit_stops.entry_id',
+        lapIn: 'lap_in',
+        lapout: 'lap_out',
+        timeInLane: 'time_in_lane',
+        driverId: 'drivers.id',
+        driverName: 'drivers.name',
+      });
+  },
 };
