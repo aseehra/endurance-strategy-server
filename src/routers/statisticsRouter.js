@@ -9,11 +9,11 @@ const router = new Router();
 router.get('/entry/:entryId', (req, res, next) => {
   const { entryId } = req.params;
   Promise.all([
-    entries.fastestLap(entryId),
     entries.averageLapTime(entryId),
+    entries.fastestLap(entryId),
     entries.pitStops(entryId),
   ])
-    .then(([[fastestLap], [{ averageLapTime }], pitStops]) => {
+    .then(([averageLapTime, fastestLap, pitStops]) => {
       res.json({
         entryId,
         fastestLap,
@@ -38,7 +38,7 @@ router.get('/entry/:entryId/stints', (req, res, next) => {
   const { entryId } = req.params;
   entries
     .stintData(entryId)
-    .then(data => res.json({ entryId, data }))
+    .then(stints => res.json({ entryId, stints }))
     .catch(next);
 });
 

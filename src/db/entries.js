@@ -6,7 +6,8 @@ module.exports = {
   averageLapTime(entryId) {
     return knex('laps')
       .avg({ averageLapTime: 'lap_time' })
-      .where('entry_id', entryId);
+      .where('entry_id', entryId)
+      .then(([{ averageLapTime }]) => parseFloat(averageLapTime));
   },
 
   fastestLap(entryId) {
@@ -25,7 +26,8 @@ module.exports = {
         lapTime: 'lap_time',
       })
       .orderBy('lap_number')
-      .limit(1);
+      .limit(1)
+      .then(([fastestLap]) => fastestLap);
   },
 
   pitStops(entryId) {
