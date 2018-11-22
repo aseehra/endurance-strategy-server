@@ -6,6 +6,7 @@ const faker = require('faker');
 
 const CLASS_NAMES = ['P1', 'P2', 'GT1', 'GT2', 'TC1', 'TC2'];
 const LAPS_PER_STINT = 40;
+const BASE_TIME_IN_LANE = 100;
 
 function generateRace(
   knex,
@@ -18,6 +19,7 @@ function generateRace(
 
   let entries;
   let drivers;
+  let entryLaps;
 
   return knex('races')
     .insert(newRace)
@@ -60,14 +62,14 @@ function generateRace(
       return knex('entries_drivers').insert(driverEntries);
     })
     .then(() => {
-      const entryLaps = entries.map((entry, index) => {
+      entryLaps = entries.map((entry, index) => {
         // This will mean that P1 laps GT1 within 5 laps
         const baseLapTime = 90 + options.classes.indexOf(entry.class) * 9;
 
         const totalLaps = Math.ceil((options.numHours * 3600) / baseLapTime);
         const laps = [];
 
-        for (let lapNum = 0; lapNum < totalLaps; lapNum += 1) {
+        for (let lapNum = 1; lapNum <= totalLaps; lapNum += 1) {
           const lap = {
             entry_id: entry.id,
             lap_number: lapNum,
@@ -84,6 +86,26 @@ function generateRace(
         return laps;
       });
       return Promise.all(entryLaps.map(laps => knex('laps').insert(laps)));
+    })
+    .then(() => {
+      const pitStops = entryLaps.map((laps, index) => {
+        const entryStops = [];
+        for (
+          let lapIn = LAPS_PER_STINT;
+          lapIn <= laps.length;
+          lapIn += LAPS_PER_STINT
+        ) {
+          const pitStop = {
+            entry_id: entries[index].id,
+            lap_in: lapIn,
+            lap_out: lapIn + 1,
+            time_in_lane: BASE_TIME_IN_LANE, // TODO: add drift
+          };
+          entryStops.push(pitStop);
+        }
+        return entryStops;
+      });
+      return Promise.all(pitStops.map(stops => knex('pit_stops').insert(stops)));
     });
 }
 
