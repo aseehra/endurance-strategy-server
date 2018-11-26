@@ -73,7 +73,7 @@ module.exports = {
             .andWhereBetween('lap_number', [boundary.start, boundary.end])
             .join('drivers', 'drivers.id', 'driver_id')
             .groupBy('drivers.id', 'drivers.name')
-            .max({ fastestLapTime: 'lap_time' })
+            .min({ fastestLapTime: 'lap_time' })
             .avg({ averageLapTime: 'lap_time' })
             .select({ driverId: 'drivers.id', driverName: 'drivers.name' })),
         );
@@ -82,6 +82,21 @@ module.exports = {
         ...stintInfo,
         stintStart: stintBoundaries[index].start,
         stintEnd: stintBoundaries[index].end,
+      })));
+    // TODO: parse floats back from strings
+  },
+
+  driverData(entryId) {
+    return knex('laps')
+      .join('drivers', 'drivers.id', 'laps.driver_id')
+      .where('laps.entry_id', entryId)
+      .groupBy('drivers.id', 'drivers.name')
+      .min({ fastestLapTime: 'lap_time' })
+      .avg({ averageLapTime: 'lap_time' })
+      .select({ driverId: 'drivers.id', driverName: 'drivers.name' })
+      .then(rawData => rawData.map(driver => ({
+        ...driver,
+        averageLapTime: parseFloat(driver.averageLapTime),
       })));
   },
 };
