@@ -82,8 +82,8 @@ module.exports = {
         ...stintInfo,
         stintStart: stintBoundaries[index].start,
         stintEnd: stintBoundaries[index].end,
+        averageLapTime: parseFloat(stintInfo.averageLapTime),
       })));
-    // TODO: parse floats back from strings
   },
 
   driverData(entryId) {
