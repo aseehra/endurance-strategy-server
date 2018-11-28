@@ -47,7 +47,7 @@ function up(knex, Promise) {
       table.integer('entry_id');
       table.integer('lap_number').unsigned();
       table.integer('driver_id');
-      table.integer('lap_time').unsigned();
+      table.float('lap_time', 8, 3);
       table.integer('position_overall').unsigned();
       table.integer('position_class').unsigned();
 
@@ -68,7 +68,7 @@ function up(knex, Promise) {
       table.integer('entry_id');
       table.integer('lap_in').unsigned();
       table.integer('lap_out').unsigned();
-      table.integer('time_in_lane').unsigned();
+      table.float('time_in_lane', 8, 3);
 
       table
         .foreign('entry_id')

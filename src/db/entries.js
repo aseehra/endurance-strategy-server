@@ -64,7 +64,12 @@ module.exports = {
           },
           [{ start: 1 }],
         );
-        stintBoundaries[stintBoundaries.length - 1].end = lastLap;
+
+        const lastStint = stintBoundaries[stintBoundaries.length - 1];
+        lastStint.end = lastLap;
+        if (lastStint.start >= lastStint.end) {
+          stintBoundaries.pop();
+        }
 
         // TODO: Think about stint boundraries as it relates to in-/out-laps
         return Promise.all(
