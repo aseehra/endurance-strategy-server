@@ -16,6 +16,11 @@ router.get('/entry/:entryId', (req, res, next) => {
     entries.driverData(entryId),
   ])
     .then(([averageLapTime, fastestLap, pitStops, driverData]) => {
+      if (!averageLapTime) {
+        next();
+        return;
+      }
+
       res.json({
         entryId,
         fastestLap,
@@ -37,6 +42,11 @@ router.get('/entry/:entryId/stops', (req, res, next) => {
   entries
     .pitStops(entryId)
     .then((pitStops) => {
+      if (pitStops.length === 0) {
+        next();
+        return;
+      }
+
       res.json({ entryId, pitStops });
     })
     .catch(next);
@@ -46,7 +56,14 @@ router.get('/entry/:entryId/stints', (req, res, next) => {
   const { entryId } = req.params;
   entries
     .stintData(entryId)
-    .then(stints => res.json({ entryId, stints }))
+    .then((stints) => {
+      if (stints.length === 0) {
+        next();
+        return;
+      }
+
+      res.json({ entryId, stints });
+    })
     .catch(next);
 });
 
@@ -54,7 +71,14 @@ router.get('/entry/:entryId/drivers', (req, res, next) => {
   const { entryId } = req.params;
   entries
     .driverData(entryId)
-    .then(driverStatistics => res.json({ entryId, driverStatistics }))
+    .then((driverStatistics) => {
+      if (driverStatistics.length === 0) {
+        next();
+        return;
+      }
+
+      res.json({ entryId, driverStatistics });
+    })
     .catch(next);
 });
 
