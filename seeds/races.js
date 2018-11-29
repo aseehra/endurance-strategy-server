@@ -21,6 +21,8 @@ function generateRace(
   let drivers;
   let entryLaps;
 
+  const carsPerClass = Math.floor(options.numEntries / options.classes.length);
+
   return knex('races')
     .insert(newRace)
     .returning('*')
@@ -28,7 +30,7 @@ function generateRace(
       entries = new Array(options.numEntries).fill().map((e, index) => ({
         race_id: race[0].id,
         car_number: index,
-        class: options.classes[index % options.classes.length],
+        class: options.classes[Math.floor(index / carsPerClass)],
         manufacturer: faker.company.companyName(),
       }));
       return knex('entries')
