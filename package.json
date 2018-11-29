@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "jest"
+    "test": "NODE_ENV=test jest"
   },
   "devDependencies": {
     "eslint": "^5.9.0",
@@ -17,7 +17,8 @@
     "eslint-plugin-import": "^2.14.0",
     "jest": "^23.6.0",
     "prettier": "^1.15.2",
-    "prettier-eslint": "^8.8.2"
+    "prettier-eslint": "^8.8.2",
+    "supertest": "^3.3.0"
   },
   "dependencies": {
     "cors": "^2.8.5",

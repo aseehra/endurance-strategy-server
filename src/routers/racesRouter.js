@@ -26,6 +26,11 @@ router.get('/:id/entries', (req, res, next) => {
   races
     .fetchEntries(id)
     .then((entries) => {
+      if (!entries.length) {
+        next();
+        return;
+      }
+
       const serialized = entries.map(entry => ({
         ...entry,
         links: { statistics: `/api/statistics/entry/${entry.id}` },

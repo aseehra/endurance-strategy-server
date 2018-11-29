@@ -4,6 +4,7 @@ const cors = require('cors');
 const express = require('express');
 const morgan = require('morgan');
 
+const errorRouter = require('./routers/errorRouter');
 const statisticsRouter = require('./routers/statisticsRouter');
 const racesRouter = require('./routers/racesRouter');
 const { PORT, CLIENT_ORIGIN } = require('../config');
@@ -20,6 +21,8 @@ app.use(cors({ origin: CLIENT_ORIGIN }));
 
 app.use('/api/races/', racesRouter);
 app.use('/api/statistics/', statisticsRouter);
+
+app.use(errorRouter);
 
 /* eslint-disable no-console */
 function main(port = PORT) {

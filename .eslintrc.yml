@@ -7,3 +7,8 @@ rules:
 
 parserOptions:
   sourceType: script
+
+overrides:
+  - files: ['*.test.js']
+    env:
+      jest: true
