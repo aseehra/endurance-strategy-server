@@ -20,11 +20,11 @@ $ yarn
 
 3. Use knex.js to set up database tables:
 ```bash
-$ npx knex [--env=production] migrate:latest
+$ npx knex [--env production] migrate:latest
 ```
 4. To seed the database, use knex.js's seed function:
 ```bash
-$ npx knex [--env=production] seed:run
+$ npx knex [--env production] seed:run
 ```
 5. Launch the server
 ```bash
