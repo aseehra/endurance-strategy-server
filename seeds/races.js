@@ -42,7 +42,7 @@ function generateRace(
       const generatedDrivers = entries.reduce((acc) => {
         for (let i = 0; i < 3; i += 1) {
           acc.push({
-            name: faker.name.findName(),
+            name: `${faker.name.firstName()} ${faker.name.lastName()}`,
           });
         }
         return acc;
@@ -117,6 +117,18 @@ function seed(knex) {
     .then(() => generateRace(knex))
     .then(() => {
       const options = { numEntries: 60, classes: CLASS_NAMES.slice(2), numHours: 10 };
+      return generateRace(knex, options);
+    })
+    .then(() => {
+      const options = { numEntries: 8, classes: CLASS_NAMES.slice(2), numHours: 2 };
+      return generateRace(knex, options);
+    })
+    .then(() => {
+      const options = { numEntries: 8, classes: CLASS_NAMES.slice(2), numHours: 1 };
+      return generateRace(knex, options);
+    })
+    .then(() => {
+      const options = { numEntries: 24, classes: CLASS_NAMES, numHours: 24 };
       return generateRace(knex, options);
     });
 }
